@@ -1,10 +1,8 @@
-import 'package:e_commerce/features/shop/screens/sub_category/sub_categories.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_function.dart';
-import 'package:get/get.dart';
 
 class VerticalImageText extends StatelessWidget {
   const VerticalImageText({
@@ -13,28 +11,32 @@ class VerticalImageText extends StatelessWidget {
     required this.title,
     this.textColor = TColors.white,
     this.backgroundColor,
+    this.isNetworkImage = true,
     this.onTap,
   });
 
   final String image, title;
   final Color textColor;
   final Color? backgroundColor;
+  final bool isNetworkImage;
   final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     final dark = (THelperFunction.isDarkMode(context));
     return GestureDetector(
-      onTap: () {
-        print("j hckjd");
-        Get.to(() => SubCategoriesScreen());
-      },
+      // onTap: () {
+      //   print("j hckjd");
+      //   Get.to(() => SubCategoriesScreen());
+      // },
+      onTap: onTap,
       child: Padding(
         padding: EdgeInsets.only(right: TSizes.spaceBtwItems),
         child: Column(
           children: [
             /// Text
             SizedBox(
+              height: 20,
               width: 45,
               child: Text(
                 title,
@@ -57,7 +59,7 @@ class VerticalImageText extends StatelessWidget {
               ),
               child: Center(
                 child: Image(
-                  image: AssetImage(image),
+                  image: NetworkImage(image),
                   fit: BoxFit.cover,
                   color: dark ? TColors.dark : TColors.light,
                 ),
@@ -68,7 +70,6 @@ class VerticalImageText extends StatelessWidget {
             // SizedBox(
             //   height: TSizes.spaceBtwItems / 2,
             // ),
-
           ],
         ),
       ),

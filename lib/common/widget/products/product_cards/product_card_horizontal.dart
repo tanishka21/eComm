@@ -1,5 +1,6 @@
 import 'package:e_commerce/common/widget/custom_shape/container/rounded_conatiner.dart';
 import 'package:e_commerce/common/widget/images/rounded_home_page_image.dart';
+import 'package:e_commerce/common/widget/products/favourite_icon/favourite_icon.dart';
 import 'package:e_commerce/common/widget/text/brand_title_text_with_verified_icon.dart';
 import 'package:e_commerce/common/widget/text/product_price_text.dart';
 import 'package:e_commerce/common/widget/text/product_title_text.dart';
@@ -7,17 +8,24 @@ import 'package:e_commerce/utils/helpers/helper_function.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../../features/shop/controller/product/product_controller.dart';
+import '../../../../features/shop/model/product_model.dart';
 import '../../../../utils/constants/colors.dart';
+import '../../../../utils/constants/enums.dart';
 import '../../../../utils/constants/image_strings.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../../style/shadow.dart';
-import '../../icons/circular_icon_favourite_button.dart';
 
 class HorizontalProductCard extends StatelessWidget {
-  const HorizontalProductCard({super.key});
+  const HorizontalProductCard({super.key, required this.product});
+
+  final ProductModel product;
 
   @override
   Widget build(BuildContext context) {
+    final controller = ProductController.instance;
+    final salePercentage =
+        controller.calculateSalePercentage(product.price, product.salePrice);
     final dark = THelperFunction.isDarkMode(context);
 
     return Container(
@@ -43,43 +51,41 @@ class HorizontalProductCard extends StatelessWidget {
                 SizedBox(
                   height: 120,
                   width: 120,
-                  child: HomePageRoundedBodyImage(
-                    imageUrl: TImages.bodyBanner1,
+                  child: TRoundedImage(
+                    imageUrl: product.thumbnail,
                     applyImageRadius: true,
+                    isNetworkImage: true,
                   ),
                 ),
 
                 /// Sale Tag
-                Positioned(
-                  width: 40,
-                  height: 25,
-                  top: 12,
-                  child: RoundedContainer(
-                    radius: TSizes.sm,
-                    backgroundColor: TColors.secondary.withOpacity(0.8),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: TSizes.sm, vertical: TSizes.xs),
-                    child: Text(
-                      '25%',
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelLarge!
-                          .apply(color: TColors.black),
+                if (salePercentage != null)
+                  Positioned(
+                    width: 40,
+                    height: 25,
+                    top: 12,
+                    child: RoundedContainer(
+                      radius: TSizes.sm,
+                      backgroundColor: TColors.secondary.withOpacity(0.8),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: TSizes.sm, vertical: TSizes.xs),
+                      child: Text(
+                        '${salePercentage}%',
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelLarge!
+                            .apply(color: TColors.black),
+                      ),
                     ),
                   ),
-                ),
 
                 /// Favorite icon button
                 Positioned(
-                  top: 0,
-                  right: 0,
-                  child: CircularIcon(
-                    icon: Iconsax.heart5,
-                    color: Colors.red,
-                    width: 40,
-                    height: 35,
-                  ),
-                ),
+                    top: 0,
+                    right: 0,
+                    child: FavouriteIcon(
+                      productId: product.id,
+                    )),
               ],
             ),
           ),
@@ -96,14 +102,14 @@ class HorizontalProductCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ProductTitleText(
-                        title: 'Nike Shoes Black and White ',
+                        title: product.title,
                         smallSize: true,
                       ),
                       SizedBox(
                         height: TSizes.spaceBtwItems / 2,
                       ),
                       BrandTitleTextWithVerifiedIcon(
-                        title: "Nike",
+                        title: product.brand!.name,
                       ),
                     ],
                   ),
@@ -111,9 +117,30 @@ class HorizontalProductCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Flexible(
-                        child: ProductPriceText(
-                          price: '256.0',
+                      /// price
+                      Flexible(
+                        child: Column(
+                          children: [
+                            if (product.productType ==
+                                ProductType.variable.toString() &&
+                                product.salePrice > 0)
+                              Padding(
+                                padding: EdgeInsets.only(left: TSizes.sm),
+                                child: Text(
+                                  product.price.toString(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium!
+                                      .apply(decoration: TextDecoration.lineThrough),
+                                ),
+                              ),
+                            Padding(
+                              padding: EdgeInsets.only(left: TSizes.sm),
+                              child: ProductPriceText(
+                                price: controller.getProductPrice(product),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
 
@@ -123,8 +150,7 @@ class HorizontalProductCard extends StatelessWidget {
                           color: TColors.dark,
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(TSizes.cardRadiusMd),
-                            bottomRight:
-                                Radius.circular(TSizes.productImageRadius),
+                            bottomRight: Radius.circular(TSizes.productImageRadius),
                           ),
                         ),
                         child: SizedBox(
@@ -139,7 +165,7 @@ class HorizontalProductCard extends StatelessWidget {
                         ),
                       ),
                     ],
-                  ),
+                  )
                 ],
               ),
             ),

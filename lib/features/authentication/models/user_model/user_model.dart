@@ -54,6 +54,7 @@ class UserModel {
   Map<String, dynamic> toJson() {
     return {
       'firstName': firstName,
+      'id': id,
       'lastName': lastName,
       'userName': username,
       'email': email,
@@ -65,20 +66,24 @@ class UserModel {
   /// Factory method to create a usermodel form firebase document snapshot.
   factory UserModel.fromSnapshot(
       DocumentSnapshot<Map<String, dynamic>> document) {
-    final data = document.data()!;
-    // if (data == null) {
-    //   throw Exception(
-    //       'Document data is null for user ID=========>>>>>>: ${document.id}============>>>>>>>>>>>>>>>>');
-    // }
+    final data = document.data();
+    if (data == null) {
+      throw UserModel.empty();
+    }
     print('User data from user_model============>>>>>>>>>>>> ${data}');
-    return UserModel(
-      id: document.id,
-      firstName: data['firstName'] as String,
-      lastName: data['lastName'] as String,
-      username: data['userName'] as String,
-      email: data['email'] as String,
-      phoneNumber: data['phoneNumber'] as String,
-      profilePicture: data['profilePicture'] as String,
-    );
+    try {
+      return UserModel(
+        id: document.id,
+        firstName: data['firstName'] as String? ?? '',
+        lastName: data['lastName'] as String? ?? '',
+        username: data['userName'] as String? ?? '',
+        email: data['email'] as String? ?? '',
+        phoneNumber: data['phoneNumber'] as String? ?? '',
+        profilePicture: data['profilePicture'] as String? ?? '',
+      );
+    } catch (e) {
+      print('Error parsing user data: $e');
+      throw Exception('Error parsing user data');
+    }
   }
 }

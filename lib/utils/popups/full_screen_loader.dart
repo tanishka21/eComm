@@ -1,4 +1,3 @@
-import 'package:e_commerce/features/authentication/screens/signup/verify_email.dart';
 import 'package:e_commerce/utils/helpers/helper_function.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,14 +18,16 @@ class FullScreenLoader {
               : TColors.white,
           width: double.infinity,
           height: double.infinity,
-          child: Column(
-            children: [
-              Text('All good'),
-              // SizedBox(
-              //   height: 250,
-              // ),
-              // AnimationLoaderWidget(text: text, animation: animation),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // Text('All good'),
+                SizedBox(
+                    // height: 250,
+                    ),
+                AnimationLoaderWidget(text: text, animation: animation),
+              ],
+            ),
           ),
         ),
       ),

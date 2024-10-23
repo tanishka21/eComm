@@ -1,3 +1,4 @@
+import 'package:e_commerce/features/shop/controller/product/cart_controller.dart';
 import 'package:e_commerce/features/shop/screens/cart/cart.dart';
 import 'package:e_commerce/utils/helpers/helper_function.dart';
 import 'package:flutter/material.dart';
@@ -9,17 +10,17 @@ import '../../../../utils/constants/colors.dart';
 class CartCounterIcon extends StatelessWidget {
   const CartCounterIcon({
     super.key,
-    required this.onPressed,
     this.iconColor = TColors.white,
     this.counterBgColor,
     this.counterTextColor,
   });
 
-  final VoidCallback onPressed;
   final Color? iconColor, counterBgColor, counterTextColor;
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(CartController());
+
     return Stack(
       children: [
         IconButton(
@@ -41,12 +42,14 @@ class CartCounterIcon extends StatelessWidget {
               borderRadius: BorderRadius.circular(100),
             ),
             child: Center(
-              child: Text(
-                '2',
-                style: Theme.of(context)
-                    .textTheme
-                    .labelLarge!
-                    .apply(color: TColors.white, fontSizeFactor: 0.8),
+              child: Obx(
+                () => Text(
+                  controller.noOfCartItems.toString(),
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelLarge!
+                      .apply(color: TColors.white, fontSizeFactor: 0.8),
+                ),
               ),
             ),
           ),

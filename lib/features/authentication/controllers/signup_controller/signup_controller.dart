@@ -15,12 +15,12 @@ class SignupController extends GetxController {
   /// Variable
   final hiddenPassword = true.obs;
   final privacyPolicy = true.obs;
-  final TextEditingController email = TextEditingController();
-  final TextEditingController lastName = TextEditingController();
-  final TextEditingController username = TextEditingController();
-  final TextEditingController password = TextEditingController();
-  final TextEditingController firstName = TextEditingController();
-  final TextEditingController phoneNumber = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController lastName = TextEditingController();
+  TextEditingController username = TextEditingController();
+  TextEditingController password = TextEditingController();
+  TextEditingController firstName = TextEditingController();
+  TextEditingController phoneNumber = TextEditingController();
   GlobalKey<FormState> signupFormKey = GlobalKey<FormState>();
 
   /// Form key for form validation
@@ -75,7 +75,6 @@ class SignupController extends GetxController {
         phoneNumber: phoneNumber.text.trim(),
         profilePicture: '',
       );
-
       print('User details =================>>>>>>>>>>>>>> ${newUser}');
 
       final userRepository = Get.put(UserRepository());
@@ -90,7 +89,9 @@ class SignupController extends GetxController {
           message: 'Your account has been created! Verify email to continue.');
 
       /// Move to Verify EMail Screen
-      Get.to(() => VerificationEmailScreen());
+      Get.to(() => VerificationEmailScreen(
+            email: email.text.trim(),
+          ));
     } catch (e) {
       /// Show some Generic Error to the user
       // TLoader.errorSnackBar(title: 'Oh Snap', message: e.toString());

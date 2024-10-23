@@ -1,3 +1,5 @@
+import 'package:e_commerce/features/authentication/controllers/forget_password/forget_password_controller.dart';
+import 'package:e_commerce/features/authentication/screens/login/login.dart';
 import 'package:e_commerce/utils/constants/image_strings.dart';
 import 'package:e_commerce/utils/constants/text_string.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,7 +10,10 @@ import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/helpers/helper_function.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
-  const ResetPasswordScreen({super.key});
+  const ResetPasswordScreen({super.key, required this.email});
+
+  final String email;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +34,7 @@ class ResetPasswordScreen extends StatelessWidget {
               /// Image with 60% of screen width
               Image(
                 image: AssetImage(TImages.resetPasswordImage),
-                width: THelperFunction.screenWidth()*0.5,
+                width: THelperFunction.screenWidth() * 0.5,
               ),
 
               const SizedBox(
@@ -59,7 +64,7 @@ class ResetPasswordScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: () => Get.offAll(() => LoginScreen()),
                   child: const Text('Done'),
                 ),
               ),
@@ -69,11 +74,11 @@ class ResetPasswordScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: TextButton(
-                  onPressed: (){},
+                  onPressed: () => ForgetPasswordController.instance
+                      .resendPasswordResetEmail(email),
                   child: const Text('Resend Email'),
                 ),
               ),
-
             ],
           ),
         ),

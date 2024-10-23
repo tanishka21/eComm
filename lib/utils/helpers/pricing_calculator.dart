@@ -1,8 +1,6 @@
-
-
 class TCalculator {
   //calculate price based on tax and shipping
-  static double calculatTotalPrice(double productPrice, String location) {
+  static double calculateTotalPrice(double productPrice, String location) {
     double taxRate = getTaxRateForLocation(location);
     double taxAmount = productPrice * taxRate;
 
@@ -24,12 +22,13 @@ class TCalculator {
     double taxAmount = productPrice * taxRate;
     return taxAmount.toStringAsFixed(2);
   }
+
   static double getTaxRateForLocation(String location) {
     return 0.10; //10%
   }
+
   static double getShippingCost(String location) {
     return 5.00;
   }
-  // sum all cart values and return total
-
+// sum all cart values and return total
 }

@@ -17,7 +17,7 @@ class BrandTitleTextWithVerifiedIcon extends StatelessWidget {
     this.brandTextSize = TextSizes.small,
   });
 
-  final String title;
+  final String? title;
   final int maxLines;
   final Color? textColor, iconColor;
   final TextAlign? textAlign;
@@ -30,7 +30,7 @@ class BrandTitleTextWithVerifiedIcon extends StatelessWidget {
       children: [
         Flexible(
           child: BrandTitleText(
-            title: title,
+            title: title ?? '',
             color: textColor,
             maxLines: maxLines,
             textAlign: textAlign,

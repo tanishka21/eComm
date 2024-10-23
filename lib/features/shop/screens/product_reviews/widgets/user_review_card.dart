@@ -3,8 +3,6 @@ import 'package:e_commerce/common/widget/custom_shape/container/rounded_conatine
 import 'package:e_commerce/utils/constants/image_strings.dart';
 import 'package:e_commerce/utils/helpers/helper_function.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:readmore/readmore.dart';
 
 import '../../../../../utils/constants/colors.dart';

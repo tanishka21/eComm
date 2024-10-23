@@ -1,9 +1,13 @@
 import 'package:e_commerce/common/widget/appbar/appbar.dart';
 import 'package:e_commerce/common/widget/layouts/grid_layout.dart';
 import 'package:e_commerce/common/widget/products/cart/cart_menu_icon.dart';
+import 'package:e_commerce/common/widget/shimmers/brands_simmer.dart';
 import 'package:e_commerce/common/widget/text/section_heading.dart';
 import 'package:e_commerce/common/brands/brand_card.dart';
+import 'package:e_commerce/features/shop/controller/brand_controller.dart';
+import 'package:e_commerce/features/shop/controller/category_controller.dart';
 import 'package:e_commerce/features/shop/screens/brands/all_brands.dart';
+import 'package:e_commerce/features/shop/screens/brands/brand_products.dart';
 import 'package:e_commerce/features/shop/screens/store/widgets/category_tab.dart';
 import 'package:e_commerce/utils/helpers/helper_function.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +23,11 @@ class StoreScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brandController = Get.put(BrandController());
+    final categories = CategoryController.instance.featuredCategories;
+
     return DefaultTabController(
-      length: 5,
+      length: categories.length,
       child: Scaffold(
         appBar: TAppBar(
           title: Text(
@@ -29,7 +36,7 @@ class StoreScreen extends StatelessWidget {
           ),
           actions: [
             CartCounterIcon(
-              onPressed: () {},
+              // onPressed: () {},
               iconColor: THelperFunction.isDarkMode(context)
                   ? TColors.white
                   : TColors.black,
@@ -80,15 +87,37 @@ class StoreScreen extends StatelessWidget {
                         height: TSizes.spaceBtwItems / 2,
                       ),
 
-                      GridLayout(
-                        itemCount: 4,
-                        mainAxisExtent: 80,
-                        itemBuilder: (_, index) {
-                          return const BrandCard(
-                            showBorder: true,
+                      ///Brands GRID
+                      Obx(() {
+                        if (brandController.isLoading.value)
+                          return const TBrandsShimmer();
+
+                        if (brandController.featuredBrand.isEmpty) {
+                          return Center(
+                            child: Text(
+                              'No Data Found!',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .apply(color: Colors.white),
+                            ),
                           );
-                        },
-                      ),
+                        }
+                        return GridLayout(
+                          itemCount: brandController.featuredBrand.length,
+                          mainAxisExtent: 80,
+                          itemBuilder: (_, index) {
+                            final brand = brandController.featuredBrand[index];
+                            return BrandCard(
+                              showBorder: true,
+                              brand: brand,
+                              onTap: () => Get.to(() => BrandProducts(
+                                    brand: brand,
+                                  )),
+                            );
+                          },
+                        );
+                      }),
                     ],
                   ),
                 ),
@@ -111,19 +140,22 @@ class StoreScreen extends StatelessWidget {
                     Tab(
                       child: Text('Cosmetics'),
                     ),
+                    Tab(
+                      child: Text('Shoes'),
+                    ),
+                    Tab(
+                      child: Text('Suits'),
+                    )
                   ],
                 ),
               ),
             ];
           },
           body: TabBarView(
-            children: [
-              CategoryTab(),
-              CategoryTab(),
-              CategoryTab(),
-              CategoryTab(),
-              CategoryTab(),
-            ],
+            // controller: ,
+            children: categories
+                .map((category) => CategoryTab(category: category))
+                .toList(),
           ),
         ),
       ),

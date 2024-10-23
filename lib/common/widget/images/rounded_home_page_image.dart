@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../utils/constants/sizes.dart';
 
-class HomePageRoundedBodyImage extends StatelessWidget {
-  const HomePageRoundedBodyImage({
+class TRoundedImage extends StatelessWidget {
+  const TRoundedImage({
     super.key,
     this.width = double.infinity,
     this.height = 90,
@@ -19,7 +19,7 @@ class HomePageRoundedBodyImage extends StatelessWidget {
   });
 
   final double? width, height;
-  final String imageUrl;
+  final String? imageUrl;
   final bool applyImageRadius;
   final BoxBorder? border;
   final Color? backgroundColor;
@@ -46,13 +46,23 @@ class HomePageRoundedBodyImage extends StatelessWidget {
           borderRadius: applyImageRadius
               ? BorderRadius.circular(borderRadius)
               : BorderRadius.zero,
-          child: Image(
-            fit: fit,
-            image: isNetworkImage
-                ? NetworkImage(imageUrl)
-                : AssetImage(imageUrl) as ImageProvider,
-            // width: double.infinity,
-          ),
+          child: imageUrl != null && imageUrl!.isNotEmpty
+              ? Image(
+                  fit: fit,
+                  image: isNetworkImage
+                      ? NetworkImage(imageUrl!)
+                      : AssetImage(imageUrl!) as ImageProvider,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Icon(
+                      Icons.error,
+                      color: Colors.red,
+                    );
+                  },
+                )
+              : const Icon(
+                  Icons.broken_image,
+                  color: Colors.grey,
+                ),
         ),
       ),
     );

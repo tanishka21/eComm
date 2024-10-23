@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce/common/widget/products/product_cards/product_card_vertical.dart';
+import 'package:e_commerce/common/widget/shimmers/vertical_product_shimmer.dart';
 import 'package:e_commerce/features/shop/screens/all_products/all_products.dart';
 import 'package:e_commerce/features/shop/screens/home/widgets/home_appbar.dart';
 import 'package:e_commerce/features/shop/screens/home/widgets/home_category.dart';
@@ -13,16 +15,17 @@ import '../../../../common/widget/layouts/grid_layout.dart';
 import '../../../../common/widget/text/section_heading.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
+import '../../controller/product/product_controller.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(ProductController());
     return Scaffold(
       // appBar: AppBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
-
             // Text(
             //   'ok',
             // ),
@@ -60,7 +63,7 @@ class HomeScreen extends StatelessWidget {
                         ),
 
                         /// Category
-                        const HomeCategory(),
+                         HomeCategory(),
                       ],
                     ),
                   ),
@@ -73,13 +76,7 @@ class HomeScreen extends StatelessWidget {
               padding: EdgeInsets.all(TSizes.defaultSpace),
               child: Column(
                 children: [
-                  PromoSlider(
-                    banner: [
-                      TImages.bodyBanner1,
-                      TImages.bodyBanner2,
-                      TImages.bodyBanner3
-                    ],
-                  ),
+                  PromoSlider(),
                   SizedBox(
                     height: TSizes.spaceBtwSection,
                   ),
@@ -87,18 +84,38 @@ class HomeScreen extends StatelessWidget {
                   /// Headings
                   SectionHeading(
                     title: 'Popular Products',
-                    onPressed: () => Get.to(() => const AllProducts()),
+                    onPressed: () => Get.to(() => AllProducts(
+                          title: 'Popular Products',
+                          futureMethod: controller.fetchAllFeaturedProducts(),
+                        )),
                   ),
                   SizedBox(
                     height: TSizes.spaceBtwItems,
                   ),
-                  SizedBox(
-                    height: 600,
-                    child: GridLayout(
-                      itemCount: 4,
-                      itemBuilder: (_, index) => const ProductCardVertical(),
-                    ),
-                  ),
+                  Obx(() {
+                    if (controller.isLoading.value)
+                      return TVerticalProductShimmer();
+
+                    if (controller.featureProducts.isEmpty) {
+                      return Center(
+                        child: Text(
+                          'No Data Found!',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      );
+                    }
+                    return SizedBox(
+                      height: 600,
+                      child: Obx(() {
+                        return GridLayout(
+                          itemCount: controller.featureProducts.length,
+                          itemBuilder: (_, index) => ProductCardVertical(
+                            product: controller.featureProducts[index],
+                          ),
+                        );
+                      }),
+                    );
+                  }),
                 ],
               ),
             ),

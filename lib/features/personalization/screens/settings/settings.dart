@@ -2,6 +2,7 @@ import 'package:e_commerce/common/widget/appbar/appbar.dart';
 import 'package:e_commerce/common/widget/custom_shape/container/primary_header_container.dart';
 import 'package:e_commerce/common/widget/list_tile/listTile.dart';
 import 'package:e_commerce/common/widget/text/section_heading.dart';
+import 'package:e_commerce/features/authentication/screens/login/login.dart';
 import 'package:e_commerce/features/shop/screens/cart/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -39,7 +40,9 @@ class SettingsScreen extends StatelessWidget {
                   ),
 
                   /// User Profile Card
-                   UserProfileTile(onPressed: () => Get.to(()=> ProfileScreen()),),
+                  UserProfileTile(
+                    onPressed: () => Get.to(() => ProfileScreen()),
+                  ),
                   SizedBox(
                     height: TSizes.spaceBtwSection,
                   ),
@@ -70,7 +73,7 @@ class SettingsScreen extends StatelessWidget {
                     title: "My Cart",
                     subTitle: "Add, remove products and move to checkout",
                     image: Iconsax.shopping_cart,
-                    onTap: () => Get.to(() =>  CartScreen()),
+                    onTap: () => Get.to(() => CartScreen()),
                   ),
                   SettingsMenuTitle(
                     title: "My Orders",
@@ -140,6 +143,20 @@ class SettingsScreen extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+
+            SizedBox(
+              width: 350,
+              height: 60,
+              child: OutlinedButton(
+                onPressed: () => Get.to(
+                  () => LoginScreen(),
+                ),
+                child: Text('Logout'),
+              ),
+            ),
+            SizedBox(
+              height: TSizes.defaultSpace,
             ),
           ],
         ),

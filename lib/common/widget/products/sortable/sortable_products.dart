@@ -1,25 +1,35 @@
+import 'package:e_commerce/features/shop/controller/all_product_controller.dart';
+import 'package:e_commerce/features/shop/model/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../../features/shop/controller/product/product_controller.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../layouts/grid_layout.dart';
 import '../product_cards/product_card_vertical.dart';
-
-
+import 'package:get/get.dart';
 
 class SortableProducts extends StatelessWidget {
   const SortableProducts({
     super.key,
+    required this.products,
   });
+
+  final List<ProductModel> products;
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(AllProductsController());
+    controller.assignProducts(products);
     return Column(
       children: [
         /// DropdownButton
         DropdownButtonFormField(
           decoration: InputDecoration(prefixIcon: Icon(Iconsax.sort)),
-          onChanged: (value) {},
+          value: controller.selectedSortOption.value,
+          onChanged: (value) {
+            controller.sortProducts(value!);
+          },
           items: [
             'Name',
             "Higher Price",
@@ -29,17 +39,21 @@ class SortableProducts extends StatelessWidget {
             "Brands"
           ]
               .map((option) =>
-              DropdownMenuItem(value: option, child: Text(option)))
+                  DropdownMenuItem(value: option, child: Text(option)))
               .toList(),
         ),
-         const SizedBox(
+        const SizedBox(
           height: TSizes.spaceBtwSection,
         ),
 
         /// Products
-        GridLayout(
-            itemCount: 6,
-            itemBuilder: (_, index) => ProductCardVertical()),
+        Obx(
+          () => GridLayout(
+              itemCount: controller.products.length,
+              itemBuilder: (_, index) => ProductCardVertical(
+                    product: controller.products[index],
+                  )),
+        ),
       ],
     );
   }

@@ -7,8 +7,6 @@ import 'package:get/get.dart';
 
 import '../../../../../../utils/constants/sizes.dart';
 import '../../../../../../utils/constants/text_string.dart';
-import '../../../../../../utils/helpers/helper_function.dart';
-import '../verify_email.dart';
 
 class SignupScreen extends StatelessWidget {
   const SignupScreen({

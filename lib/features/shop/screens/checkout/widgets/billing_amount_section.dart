@@ -1,3 +1,5 @@
+import 'package:e_commerce/features/shop/controller/product/cart_controller.dart';
+import 'package:e_commerce/utils/helpers/pricing_calculator.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../utils/constants/sizes.dart';
@@ -7,6 +9,9 @@ class BillingAmountSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cartController = CartController.instance;
+    final subTotal = cartController.totalCartPrice.value;
+
     return Column(
       children: [
         /// subtotal
@@ -18,7 +23,7 @@ class BillingAmountSection extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             Text(
-              '\$256.0',
+              '\$${subTotal}',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ],
@@ -36,7 +41,7 @@ class BillingAmountSection extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             Text(
-              '\$6.0',
+              '\$${TCalculator.calculateShippingCost(subTotal, 'IN')}',
               style: Theme.of(context).textTheme.labelLarge,
             ),
           ],
@@ -54,7 +59,7 @@ class BillingAmountSection extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             Text(
-              '\$6.0',
+              '\$${TCalculator.calculateTax(subTotal,'IN')}',
               style: Theme.of(context).textTheme.labelLarge,
             ),
           ],
@@ -62,6 +67,7 @@ class BillingAmountSection extends StatelessWidget {
         const SizedBox(
           height: TSizes.spaceBtwItems / 2,
         ),
+
         /// Order Fee
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -71,7 +77,7 @@ class BillingAmountSection extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             Text(
-              '\$6.0',
+              '\$${TCalculator.calculateTotalPrice(subTotal, 'IN')}',
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ],

@@ -1,4 +1,6 @@
 import 'package:e_commerce/common/widget/text/section_heading.dart';
+import 'package:e_commerce/features/shop/controller/product/images_controller.dart';
+import 'package:e_commerce/features/shop/model/product_model.dart';
 import 'package:e_commerce/features/shop/screens/checkout/checkout.dart';
 import 'package:e_commerce/features/shop/screens/product_details/widgets/bottom_add_to_cart_widget.dart';
 import 'package:e_commerce/features/shop/screens/product_details/widgets/product_attributes.dart';
@@ -9,24 +11,32 @@ import 'package:e_commerce/utils/helpers/helper_function.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:readmore/readmore.dart';
+import '../../../../utils/constants/enums.dart';
 import '../../../../utils/constants/sizes.dart';
 import 'package:get/get.dart';
 
 import '../product_reviews/product_reviews.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
-  const ProductDetailsScreen({super.key});
+  const ProductDetailsScreen({super.key, required this.product});
+
+  final ProductModel product;
 
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunction.isDarkMode(context);
+
     return Scaffold(
-      bottomNavigationBar: BottomAddToCart(),
+      bottomNavigationBar: BottomAddToCart(
+        product: product,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             /// 1- Product Image Slider
-            ProductImageSlider(),
+            ProductImageSlider(
+              product: product,
+            ),
 
             /// 2- Product Details
             Padding(
@@ -41,20 +51,27 @@ class ProductDetailsScreen extends StatelessWidget {
                   RatingAndShare(),
 
                   /// - Price, Title, Stock & Brand
-                  ProductMetaData(),
+                  ProductMetaData(
+                    product: product,
+                  ),
 
                   /// - Attributes
-                  ProductAttributes(),
-                  SizedBox(
-                    height: TSizes.spaceBtwItems,
-                  ),
+                  if (product.productType != ProductType.variable.toString())
+                    ProductAttributes(
+                      product: product,
+                    ),
+                  if (product.productType != ProductType.variable.toString())
+                    SizedBox(
+                      height: TSizes.spaceBtwItems,
+                    ),
 
                   ///  - Checkout Button
 
                   SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                          onPressed: () => Get.to(() => CheckoutScreen()), child: Text('Checkout'))),
+                          onPressed: () => Get.to(() => CheckoutScreen()),
+                          child: Text('Checkout'))),
                   SizedBox(
                     height: TSizes.spaceBtwItems,
                   ),
@@ -69,7 +86,7 @@ class ProductDetailsScreen extends StatelessWidget {
                     height: TSizes.spaceBtwSection,
                   ),
                   ReadMoreText(
-                    "This is a Product description for Blue Nike Sleeve less vest. There are more things that can be added, there is so many other options you can try to get your stuff done.",
+                    product.description ?? '',
                     trimLines: 2,
                     trimMode: TrimMode.Line,
                     trimCollapsedText: 'show more',

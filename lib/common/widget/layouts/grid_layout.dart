@@ -26,7 +26,6 @@ class GridLayout extends StatelessWidget {
         mainAxisSpacing: TSizes.gridViewSpacing,
         crossAxisSpacing: TSizes.gridViewSpacing,
         mainAxisExtent: mainAxisExtent,
-
       ),
       itemBuilder: itemBuilder,
     );
