@@ -1,0 +1,83 @@
+import 'package:e_commerce/utils/constants/image_strings.dart';
+import 'package:e_commerce/utils/constants/text_string.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../../../utils/constants/sizes.dart';
+import '../../../../utils/helpers/helper_function.dart';
+
+class ResetPasswordScreen extends StatelessWidget {
+  const ResetPasswordScreen({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            onPressed: () => Get.back(),
+            icon: Icon(CupertinoIcons.clear),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(TSizes.defaultSpace),
+          child: Column(
+            children: [
+              /// Image with 60% of screen width
+              Image(
+                image: AssetImage(TImages.resetPasswordImage),
+                width: THelperFunction.screenWidth()*0.5,
+              ),
+
+              const SizedBox(
+                height: TSizes.spaceBtwSection,
+              ),
+
+              ///Title & Subtitle
+              Text(
+                TTexts.changeYourPasswordTitle,
+                style: Theme.of(context).textTheme.headlineMedium,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: TSizes.spaceBtwItems,
+              ),
+
+              Text(
+                TTexts.changeYourPasswordTitleSubTitle,
+                style: Theme.of(context).textTheme.labelMedium,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: TSizes.spaceBtwSection,
+              ),
+
+              /// Buttons
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: (){},
+                  child: const Text('Done'),
+                ),
+              ),
+              const SizedBox(
+                height: TSizes.spaceBtwSection,
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: (){},
+                  child: const Text('Resend Email'),
+                ),
+              ),
+
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
